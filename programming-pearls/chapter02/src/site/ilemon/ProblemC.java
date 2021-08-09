@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * <p>因为每一个单词都可以通过改变其他单词中字母的顺序来得到。</p>
  */
 public class ProblemC {
-    static String[] dictionary = {"stop", "pots", "tops", "abc", "cba", "xyz"};
+    static String[] dictionary = {"pans", "pots", "opt", "snap", "stop", "tops"};
 
     // 初步思路：
     // 1. 变位词长度要大于1
@@ -69,10 +69,81 @@ public class ProblemC {
         return new String(chars);
     }
 
+
+    // 思路2：
+    // 1. 标识每个单词，遍历每个单词，按照如下结构存储：
+    //    class Sign {
+    //      private String sign;
+    //      private String word;
+    //    }
+    //    其中sign存储排序后的单词，word存储原本的单词
+    // 2. 对于上一步获得的sign集合中的sign进行排序得到sortedSigns
+    // 3. 对sortedSigns，按照每行一种变位词进行输出
+
+    public static List<Sign> signWords() {
+        List<Sign> result = Arrays.stream(dictionary)
+                .map(e -> new Sign(sort(e), e))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    public static List<Sign> sorted(List<Sign> signs) {
+        return signs.stream().sorted(Comparator.comparing(Sign :: getSign)).collect(Collectors.toList());
+    }
+
     public static void main(String[] args) {
-        List<Map<String, List<String>>> result = find();
-        for (Map<String, List<String>> item : result) {
-            System.out.println(item);
+
+        List<Sign> signs = signWords();
+        System.out.println("step1:");
+        signs.forEach(System.out :: println);
+        System.out.println("step2:");
+        signs = sorted(signs);
+        signs.forEach(System.out :: println);
+        System.out.println("step3:");
+        StringBuffer sb = new StringBuffer();
+        String preSign = "";
+        for (int i = 0; i < signs.size(); i++) {
+            if (!preSign.equals(signs.get(i).getSign())) {
+                System.out.println(sb);
+                sb.delete(0, sb.length());
+            }
+            sb.append(signs.get(i).getWord() + "\t");
+            preSign = signs.get(i).getSign();
+
         }
+        if (sb.length() > 0) {
+            System.out.println(sb);
+        }
+    }
+}
+
+class Sign {
+    private String sign;
+    private String word;
+
+    public Sign(String sign, String word) {
+        this.sign = sign;
+        this.word = word;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    @Override
+    public String toString() {
+        return sign + "\t" + word;
     }
 }
