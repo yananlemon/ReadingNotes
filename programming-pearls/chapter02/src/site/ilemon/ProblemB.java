@@ -40,17 +40,17 @@ public class ProblemB {
             source[i] = source[j];
             source[j] = temp;
             i++;
+            j--;
         }
     }
 
 
+
+
     public static void main(String[] args) {
-        //char[] vector = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-        /*char[] result = leftRotate(vector, 3);
-        for (int i = 0; i < result.length; i++)
-            System.out.print(result[i]);*/
-        char[] vector = {'a', 'b', 'c', 'd'};
-        int count = 2;
+        char[] vector = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+        //char[] vector = {'a', 'b', 'c', 'd'};
+        int count = 3;
         reverse(vector, 0, count - 1);
         reverse(vector, count, vector.length - 1);
         reverse(vector, 0, vector.length - 1);
